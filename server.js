@@ -1,6 +1,6 @@
 // Require the Bolt package (github.com/slackapi/bolt)
 const { App } = require("@slack/bolt");
-const { lyricsService} = require("songNameFinder")
+const { lyricsService } = require("trackSearch")
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,

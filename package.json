@@ -23,8 +23,9 @@
   },
   "homepage": "https://github.com/leandrosandoval/lyricfy#readme",
   "dependencies": {
-    "dotenv": "^6.2.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "axios": "^0.20.0",
     "slack": "^11.0.2",
     "@slack/bolt": "^1.6.0"
   }
