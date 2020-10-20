@@ -1,2 +1,4 @@
 node_modules/
 .env
+modal_example.js
+actions_example.js
