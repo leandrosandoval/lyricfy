@@ -2,38 +2,38 @@
 const axios = require("axios")
 const API_URL = process.env.API_URL
 const MUSIXMATCH_API_KEY = process.env.MUSIXMATCH_API_KEY
-const bot = new Slack({token: SLACK_BOT_TOKEN})
 
-function trackSearch(lyrics) {
+const musixmatchCall = async lyrics => {
+    return axios({
+        method: 'GET',
+        url: API_URL + `/track.search`,
+        headers: { 'Content-Type': 'application/json' },
+        params: {
+            q_lyrics: lyrics.toString(),
+            s_track_rating: "desc",
+            s_quorum_factor: 1,
+            // paginated so I don't get the whole lot of songs with those lyrics but only the top 3 most relevant ones. 
+            page_size: 3,
+            page: 1,
+            apikey: MUSIXMATCH_API_KEY  
+        }
+    })
+}
+
+const trackSearch = async (lyrics) => {
     try {
-        // implement finder
-        const response = await fetch(API_URL + `/track.search`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-            params: {
-                q_lyrics: lyrics.toString(),
-                s_artist_rating: "desc",
-                s_track_rating: "desc",
-                s_quorum_factor: 1,
-                // paginated so I don't get the whole lot of songs with those lyrics but only the top 3 most relevant ones. 
-                page_size: 3,
-                page: 1
-            }
-        })
 
-        const matches = response.text
-        let songNames = []
-        JSON.parse(matches.track_list).forEach(element => {
-            songNames.push(element.track_name)
-        })
-        const text = `Best matches for those lyrics are: ${songNames[0]} , ${songNames[1]}, and ${songNames[2]}`
-
-        // how to post messages
+        const response = await musixmatchCall(lyrics);
+        const matches = [];
+        const tracks = response.data.message.body.track_list;
+        for (let i=0;i<tracks.length;i++) {
+            matches.push(tracks[i].track.track_name);
+        }
+        console.log(matches);
+        return matches;
     } catch (err) {
-        console.log('oops, ${err.message}')
-        // should I add a response here?
+        console.log(`oops, ${err.message}`);
     }
-
 }
 
 module.exports = {
