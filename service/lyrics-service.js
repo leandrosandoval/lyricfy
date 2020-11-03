@@ -6,13 +6,13 @@ const MUSIXMATCH_API_KEY = process.env.MUSIXMATCH_API_KEY
 const musixmatchCall = async lyrics => {
     return axios({
         method: 'GET',
-        url: API_URL + `/track.search`,
+        url: API_URL,
         headers: { 'Content-Type': 'application/json' },
         params: {
             q_lyrics: lyrics.toString(),
             s_track_rating: "desc",
             s_quorum_factor: 1,
-            // paginated so I don't get the whole lot of songs with those lyrics but only the top 3 most relevant ones. 
+            // paginate so I don't get the whole lot of songs with those lyrics but only the top 3 most relevant ones. 
             page_size: 3,
             page: 1,
             apikey: MUSIXMATCH_API_KEY  

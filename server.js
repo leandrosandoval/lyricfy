@@ -8,18 +8,19 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET
 });
 
-app.command('/lyrics', async({ack, payload, context}) => {
+app.command('/lyricfy', async({ack, payload, context}) => {
   ack();
 
   try {
     console.log('texto desde slack:');
-    console.log(payload.body.text);
-    const matches = await trackSearch(payload.body.text)
+    console.log(payload);
+    console.log(payload.text);
+    const matches = await trackSearch(payload.text)
 
     const result = await app.client.chat.postMessage({
       token: context.botToken,
       channel: payload.channel_id,
-      text: `Possible track matches for those lyrics are: \n\n - ${matches[0]} \n - ${matches[1]} \n - ${matches[2]}`
+      text: `Possible matches for those lyrics are: \n\n - ${matches[0]} \n - ${matches[1]} \n - ${matches[2]}`
     });
     console.log(result);
   }
